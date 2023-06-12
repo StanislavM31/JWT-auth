@@ -1,4 +1,4 @@
-
+/*
 const mongoose = require('mongoose');
 
 const User = new mongoose.Schema({
@@ -10,4 +10,18 @@ const User = new mongoose.Schema({
 //как будет хранится пользователь в БД
 
 
-module.exports = mongoose.model('User', User);
+module.exports = mongoose.model('User', User); */
+
+
+const {Schema, model}= require('mongoose');
+
+const User = Schema({
+    username: {type: String, unique: true, required:true},
+    password: {type: String, required: true},
+    roles:[{type:String, ref: 'Role'}]
+    //пользователь будет обладать массивом ролей(user,admin). ссылка на сущность Роли
+});
+//как будет хранится пользователь в БД
+
+
+module.exports = model('User', User);
