@@ -1,10 +1,15 @@
 const User = require('./models/User');
 const Role = require('./models/Role');
 const bcrypt = require('bcrypt');
+const {validationResult} = require('express-validator');
 
 class authController{
     async registration(req,res){
         try {
+            const errors = validationResult(req);
+            if(!errors.isEmpty()){
+                return res.status(400).json({message: "ошибка регистрации", errors});
+            }
             const{username, password} = req.body;
             const candidate = await User.findOne({username});
             if(candidate) {
@@ -16,7 +21,7 @@ class authController{
             await user.save();
             return res.json({message:'Пользователь успешно зарегистрирован'});
         } catch (error) {
-            console.log(error);
+            console.log(error.message);
             res.status(400).json({message: `Registration error!!`});
         }
     }
@@ -29,7 +34,7 @@ class authController{
     }
     async getUsers(req,res){
         try {
- /*            const userRole = new Role();
+/*             const userRole = new Role();
             const adminRole = new Role({value: "ADMIN"});
             await userRole.save();
             await adminRole.save(); */
