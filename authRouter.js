@@ -7,7 +7,7 @@ router.post(
   "/registration",
   [
     check("username", "Имя Пользователя не может быть пустым").notEmpty(),
-    check("password", " 4 < длина пароля должна < 9").isLength({min:4, max:10})
+    check("password", " 4 < длина пароля должна < 9").isLength({min:4, max:8})
   ],
   controller.registration
 );
