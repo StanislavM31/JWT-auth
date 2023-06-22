@@ -1,7 +1,17 @@
 const User = require('./models/User');
 const Role = require('./models/Role');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 const {validationResult} = require('express-validator');
+const {secretKey} = require("./config")
+
+function generateAccessToken(id, roles){
+    const payload = {id, roles};
+    return jwt.sign(payload, secretKey, );
+    //payload: обьект с данными которые мы хотим спрятать в токене
+    //secretKey: по ключу расшифровывается токен
+    //options: expiresIn:"24" (время жизни токена)
+}
 
 class authController{
     async registration(req,res){
@@ -27,7 +37,17 @@ class authController{
     }
     async login(req,res){
         try {
-
+            const {username, password} = req.body;
+            const user = await User.findOne({username});
+            if(!user) {
+                return res.status(400).json({message: `Пользователь ${username} не найден`})
+            }
+            const validPassword = bcrypt.compareSync(password, user.password);
+            if(!validPassword){
+                return res.status(400).json({message: `Вы ввели неверный пароль`});
+            }
+            const token = generateAccessToken(user.id, user.roles);
+            return res.json({token})
         } catch (error) {
             res.status(400).json({message: `login error`});
         }
