@@ -59,7 +59,9 @@ class authController{
             await userRole.save();
             await adminRole.save(); */
             //добавление ролей в Mongo
-            res.json('server work');
+
+            const users = await User.find();
+            res.json(users);
         } catch (error) {
             console.log(error);
         }
