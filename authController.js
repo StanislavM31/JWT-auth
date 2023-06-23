@@ -26,6 +26,7 @@ class authController{
                 return res.status(400).json({message:"Пользователь с таким именем уже существует"})
             }
             const hashPassword = bcrypt.hashSync(password, 3);
+            //const userRole = await Role.findOne({value:"ADMIN"}); //добавление admin
             const userRole = await Role.findOne({value:"USER"});
             const user = new User({username, password: hashPassword, roles: [userRole.value]})
             await user.save();
@@ -61,6 +62,7 @@ class authController{
             //добавление ролей в Mongo
 
             const users = await User.find();
+
             res.json(users);
         } catch (error) {
             console.log(error);
