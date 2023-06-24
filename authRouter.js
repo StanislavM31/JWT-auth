@@ -3,6 +3,8 @@ const router = new Router();
 const controller = require("./authController");
 const { check } = require("express-validator");
 const authValidator = require("./middleware/authMiddleware");
+const isAccessAllowed = require("./middleware/roleMiddleware");
+
 
 router.post(
   "/registration",
@@ -13,6 +15,6 @@ router.post(
   controller.registration
 );
 router.post("/login", controller.login);
-router.get("/users", authValidator, controller.getUsers);
+router.get("/users", isAccessAllowed(['USER', 'ADMIN']), controller.getUsers);
 
 module.exports = router;
