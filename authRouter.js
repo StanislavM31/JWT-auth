@@ -2,8 +2,8 @@ const Router = require("express");
 const router = new Router();
 const controller = require("./authController");
 const { check } = require("express-validator");
-const authValidator = require("./middleware/authMiddleware");
-const isAccessAllowed = require("./middleware/roleMiddleware");
+const authValidator = require("../middleware/authMiddleware");
+const isAccessAllowed = require("../middleware/roleMiddleware");
 
 
 router.post(
